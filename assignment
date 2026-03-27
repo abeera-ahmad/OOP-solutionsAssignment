@@ -1,0 +1,153 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+class Hero{
+	protected:
+	    string HeroName;
+	    string HeroType;
+	    double HealthPoint;
+	    double PowerLevel;
+	    double ExperiencePoint;
+	public:
+		Hero(string HeroName,string HeroType,double HealthPoint,double PowerLevel,double ExperiencePoint){
+			this->HeroName=HeroName;
+			this->HeroType=HeroType;
+			this->HealthPoint=HealthPoint;
+			this->PowerLevel=PowerLevel;
+			this->ExperiencePoint=ExperiencePoint;
+		}
+		
+		void DisplayMessage(){
+			cout<<"Welcome to Fantasy Battle Arena!"<<endl;
+			cout<<endl;
+		}
+		virtual void display()
+		{
+			cout<<"HERO NAME : "<<HeroName<<endl;
+			cout<<"HERO TYPE : "<<HeroType<<endl;
+			cout<<"HEALTH POINTS : "<<HealthPoint<<endl;
+			cout<<"POWER LEVEL : "<<PowerLevel<<endl;
+			cout<<"EXPERIENCE POINTS : "<<ExperiencePoint<<endl;
+			cout<<endl;
+		}
+		
+		virtual void Attack()=0;
+		virtual void Defence()=0;
+};
+		
+	class Warrior : public Hero {
+		public:
+			string Weapon;
+			double ArmorStrength;
+			double RageLevel;
+			
+		Warrior(string HeroName,string HeroType,double HealthPoint,double PowerLevel,double ExperiencePoint,string Weapon,double ArmorStrength,double RageLevel) : Hero(HeroName, HeroType, HealthPoint, PowerLevel, ExperiencePoint){
+			this->Weapon = Weapon;
+            this->ArmorStrength = ArmorStrength;
+            this->RageLevel = RageLevel;
+		}
+
+        void Attack() override {
+            cout<<HeroName<<" attacks with "<<Weapon<<" causing "<<PowerLevel * (1 + RageLevel)<<" damage!"<<endl;
+    }
+    
+        void Defence() override {
+            cout<<HeroName<<" defends using armor with strength "<<ArmorStrength<<"!"<<endl;
+        }
+        
+        void display() override{
+        cout<< "WEAPON : "<<Weapon<<endl;
+        cout<< "ARMOR STRENGTH: "<<ArmorStrength<<endl;
+        cout<< "RAGE LEVEL: "<<RageLevel<<endl;
+    }
+};
+
+    class Mage : public Hero {
+        public:
+        string MagicType;
+        double Mana;
+        double SpellPower;
+
+        Mage(string HeroName,string HeroType,double HealthPoint,double PowerLevel,double ExperiencePoint,string magicType, double mana, double spellPower): Hero(HeroName, HeroType, HealthPoint, PowerLevel, ExperiencePoint)
+        {
+            this->MagicType = magicType;
+            this->Mana = mana;
+            this->SpellPower = spellPower;
+        }
+
+        void Attack() override {
+            cout<<HeroName<<" casts a "<<MagicType<<" spell causing "<<SpellPower * (1 + PowerLevel / 100)<<" damage!"<<endl;
+                Mana -= 10;
+        }
+
+        void Defence() override {
+            cout<<HeroName<<" shields using magical barrier!"<<endl;
+        }
+        
+        void display() override{
+        cout<< "Spell: "<<MagicType<<endl;
+        cout<< "Mana Points: "<<Mana<<endl;
+        cout<< "Magic Multiplier: "<<SpellPower<<endl;
+    }
+};
+
+    class Archer : public Hero {
+    public:
+        string BowType;
+        int ArrowCount;
+        double Agility;
+
+        Archer(string HeroName,string HeroType,double HealthPoint,double PowerLevel,double ExperiencePoint,string bowType, int arrowCount, double agility): Hero(HeroName, HeroType, HealthPoint, PowerLevel,ExperiencePoint)
+        {
+            this->BowType = bowType;
+            this->ArrowCount = arrowCount;
+            this->Agility = agility;
+        }
+
+        void Attack() override {
+            if (ArrowCount > 0) {
+                cout<<HeroName<<" shoots an arrow from "<<BowType<<" causing "<<PowerLevel * (1 + Agility)<<" damage!"<<endl;
+                ArrowCount--;
+            }
+			else {
+                cout<<HeroName<<" has no arrows left!"<<endl;
+            }
+        }
+
+        void Defence() override {
+            cout<<HeroName<<" dodges the attack using agility of "<<Agility<<"!"<<endl;
+        }
+        
+        void display() override {
+        cout<< "BOW TYPE: "<<BowType<<endl;
+        cout<< "ARROWS: "<<ArrowCount<<endl;
+        cout<< "ACCURACY: "<<Agility<<endl;
+    }
+};
+		
+int main()
+{
+    Warrior w1("Arthas", "Warrior", 100, 50, 0, "Sword", 30, 0.2);
+
+    Mage m1("Merlin", "Mage", 80, 40, 0, "Fire", 100, 60);
+
+    Archer a1("Legolas", "Archer", 90, 45, 0, "Longbow", 20, 0.3);
+
+    w1.DisplayMessage();
+    
+    w1.display();
+    m1.display();
+    a1.display();
+
+    w1.Attack();
+    w1.Defence();
+
+    m1.Attack();
+    m1.Defence();
+
+    a1.Attack();
+    a1.Defence();
+
+    return 0;
+}
